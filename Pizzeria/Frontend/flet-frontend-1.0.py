@@ -16,23 +16,25 @@ def main(page: ft.Page):
         page.update()
 
     def show_menu_view():
-        # Limpiar la página actual
         page.controls.clear()
         
-        # Crear elementos de la vista del menú
+        #elementos de la vista del menú
         title = ft.Text("Menú", size=32, weight="bold")
         hawaiana_button = ft.ElevatedButton(text="Hawaiana", on_click=lambda _: show_snack_bar("Pedido Hawaiana realizado"))
         peperonni_button = ft.ElevatedButton(text="Peperonni", on_click=lambda _: show_snack_bar("Pedido Peperonni realizado"))
         vegetales_button = ft.ElevatedButton(text="Vegetales", on_click=lambda _: show_snack_bar("Pedido Vegetales realizado"))
+        back_button = ft.ElevatedButton(text="Regresar", on_click=lambda _: show_pizzeria_view())
+
         
-        # Añadir elementos a la página
+        #elementos de la página
         page.add(
             ft.Column(
                 [
                     title,
                     hawaiana_button,
                     peperonni_button,
-                    vegetales_button
+                    vegetales_button,
+                    back_button
                 ],
                 alignment=ft.MainAxisAlignment.CENTER,
                 spacing=20,
@@ -41,15 +43,13 @@ def main(page: ft.Page):
         page.update()
     
     def show_pizzeria_view():
-        # Limpiar la página actual
         page.controls.clear()
         
-        # Crear elementos de la vista de la pizzería
+        #elementos de la vista de la pizzería
         title = ft.Text("Pizzeria", size=32, weight="bold")
-        pizza_image = ft.Image(src="https://example.com/pizza.jpg", width=200, height=200)  # Asegúrate de usar una URL válida para la imagen
+        pizza_image = ft.Image(src="https://2trendies.com/hero/2023/04/pizzapepperoni.jpg?width=1200&aspect_ratio=16:9", width=400, height=200) 
         order_button = ft.ElevatedButton(text="Ordenar pedido", on_click=lambda _: show_menu_view())
         
-        # Añadir elementos a la página
         page.add(
             ft.Column(
                 [
@@ -132,14 +132,14 @@ def main(page: ft.Page):
     page.add(
         ft.Column(
             [
-                ft.Text("Formulario de Registro"),
+                ft.Text("Registro"),
                 email_input,
                 password_input,
                 firstName_input,
                 lastName_input,
                 cellphone_input,
                 register_button,
-                ft.Text("Formulario de Inicio de Sesión"),
+                ft.Text("Inicio de Sesión"),
                 email_input,
                 password_input,
                 login_button,
