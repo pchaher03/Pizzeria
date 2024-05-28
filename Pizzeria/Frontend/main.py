@@ -122,7 +122,6 @@ def registerAndLoginPage(page):
     result = ft.Text()
 
     page.add(
-        createNavBar(page),
         ft.Column(
             [
                 ft.Text("Registro"),
