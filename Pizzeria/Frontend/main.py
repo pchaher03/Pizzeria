@@ -1,10 +1,10 @@
-import flet
+import flet as ft
 import requests
 
 def showSnackBar(page, message, success=True):
-    color = flet.colors.GREEN if success else flet.colors.RED
-    snack = flet.SnackBar(
-        content=flet.Text(message),
+    color = ft.colors.GREEN if success else ft.colors.RED
+    snack = ft.SnackBar(
+        content=ft.Text(message),
         bgcolor=color,
         duration=3000
     )
@@ -16,15 +16,16 @@ def showMenuView(page):
     page.controls.clear()
 
     # Elementos de la vista del menú
-    title = flet.Text("Menú", size=32, weight="bold")
-    hawaianaButton = flet.ElevatedButton(text="Hawaiana", on_click=lambda _: showSnackBar(page, "Pedido Hawaiana realizado"))
-    peperonniButton = flet.ElevatedButton(text="Peperonni", on_click=lambda _: showSnackBar(page, "Pedido Peperonni realizado"))
-    vegetalesButton = flet.ElevatedButton(text="Vegetales", on_click=lambda _: showSnackBar(page, "Pedido Vegetales realizado"))
-    backButton = flet.ElevatedButton(text="Regresar", on_click=lambda _: showPizzeriaView(page))
+    title = ft.Text("Menú", size=32, weight="bold")
+    hawaianaButton = ft.ElevatedButton(text="Hawaiana", on_click=lambda _: showSnackBar(page, "Pedido Hawaiana realizado"))
+    peperonniButton = ft.ElevatedButton(text="Peperonni", on_click=lambda _: showSnackBar(page, "Pedido Peperonni realizado"))
+    vegetalesButton = ft.ElevatedButton(text="Vegetales", on_click=lambda _: showSnackBar(page, "Pedido Vegetales realizado"))
+    backButton = ft.ElevatedButton(text="Regresar", on_click=lambda _: showPizzeriaView(page))
 
     # Elementos de la página
     page.add(
-        flet.Column(
+        createNavBar(page),
+        ft.Column(
             [
                 title,
                 hawaianaButton,
@@ -32,7 +33,7 @@ def showMenuView(page):
                 vegetalesButton,
                 backButton
             ],
-            alignment=flet.MainAxisAlignment.CENTER,
+            alignment=ft.MainAxisAlignment.CENTER,
             spacing=20,
         )
     )
@@ -42,18 +43,19 @@ def showPizzeriaView(page):
     page.controls.clear()
 
     # Elementos de la vista de la pizzería
-    title = flet.Text("Pizzeria", size=32, weight="bold")
-    pizzaImage = flet.Image(src="https://2trendies.com/hero/2023/04/pizzapepperoni.jpg?width=1200&aspect_ratio=16:9", width=400, height=200)
-    orderButton = flet.ElevatedButton(text="Ordenar pedido", on_click=lambda _: showMenuView(page))
+    title = ft.Text("Pizzeria", size=32, weight="bold")
+    pizzaImage = ft.Image(src="https://2trendies.com/hero/2023/04/pizzapepperoni.jpg?width=1200&aspect_ratio=16:9", width=400, height=200)
+    orderButton = ft.ElevatedButton(text="Ordenar pedido", on_click=lambda _: showMenuView(page))
 
     page.add(
-        flet.Column(
+        createNavBar(page),
+        ft.Column(
             [
                 title,
                 pizzaImage,
                 orderButton
             ],
-            alignment=flet.MainAxisAlignment.CENTER,
+            alignment=ft.MainAxisAlignment.CENTER,
             spacing=20,
         )
     )
@@ -100,47 +102,64 @@ def login(page, emailInput, passwordInput):
             showSnackBar(page, "Inicio de sesión exitoso", success=True)
             showPizzeriaView(page)
         else:
-            showSnackBar(page, f"Error: {response.status_code} - Error en los datos.", success=False)
+            showSnackBar(page, f"Error: {response.status_code} - {response.text}", success=False)
     except Exception as ex:
         showSnackBar(page, f"Error: {str(ex)}", success=False)
 
     page.update()
 
 def registerAndLoginPage(page):
-    emailInput = flet.TextField(label="Email")
-    passwordInput = flet.TextField(label="Contraseña", password=True)
-    firstNameInput = flet.TextField(label="Nombre")
-    lastNameInput = flet.TextField(label="Apellido")
-    cellphoneInput = flet.TextField(label="Teléfono")
+    page.controls.clear()
+    emailInput = ft.TextField(label="Email")
+    passwordInput = ft.TextField(label="Contraseña", password=True)
+    firstNameInput = ft.TextField(label="Nombre")
+    lastNameInput = ft.TextField(label="Apellido")
+    cellphoneInput = ft.TextField(label="Teléfono")
 
-    registerButton = flet.ElevatedButton(text="Registrar", on_click=lambda e: register(page, emailInput, passwordInput, firstNameInput, lastNameInput, cellphoneInput))
-    loginButton = flet.ElevatedButton(text="Iniciar sesión", on_click=lambda e: login(page, emailInput, passwordInput))
+    registerButton = ft.ElevatedButton(text="Registrar", on_click=lambda e: register(page, emailInput, passwordInput, firstNameInput, lastNameInput, cellphoneInput))
+    loginButton = ft.ElevatedButton(text="Iniciar sesión", on_click=lambda e: login(page, emailInput, passwordInput))
 
-    result = flet.Text()
+    result = ft.Text()
 
     page.add(
-        flet.Column(
+        createNavBar(page),
+        ft.Column(
             [
-                flet.Text("Registro"),
+                ft.Text("Registro"),
                 emailInput,
                 passwordInput,
                 firstNameInput,
                 lastNameInput,
                 cellphoneInput,
                 registerButton,
-                flet.Text("Inicio de Sesión"),
+                ft.Text("Inicio de Sesión"),
                 emailInput,
                 passwordInput,
                 loginButton,
                 result
             ],
-            alignment=flet.MainAxisAlignment.CENTER,
+            alignment=ft.MainAxisAlignment.CENTER,
             spacing=10,
         )
     )
 
-def main(page: flet.Page):
+def createNavBar(page):
+    homeButton = ft.ElevatedButton(text="Inicio", on_click=lambda _: showPizzeriaView(page))
+    logoutButton = ft.ElevatedButton(text="Cerrar sesión", on_click=lambda _: registerAndLoginPage(page))
+
+    navBar = ft.Row(
+        [
+            homeButton,
+            logoutButton
+        ],
+        alignment=ft.MainAxisAlignment.END,
+        spacing=10,
+    )
+
+    return navBar
+
+def main(page: ft.Page):
     page.title = "Pizzeria"
     registerAndLoginPage(page)
 
-flet.app(target=main)
+ft.app(target=main)
