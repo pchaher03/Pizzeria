@@ -8,7 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-@Service 
+@Service
 public class UserService {
     private final UserRepository userRepository;
     public UserService(UserRepository userRepository) {
@@ -24,7 +24,7 @@ public class UserService {
             map.put("error", true);
             map.put("mensaje", "Ya existe una cuenta con ese email.");
             return new ResponseEntity<>(
-                map, 
+                map,
                 HttpStatus.CONFLICT
             );
         }
@@ -32,7 +32,7 @@ public class UserService {
         map.put("datos", user);
         map.put("mensaje", "La cuenta se creo con exito.");
         return new ResponseEntity<>(
-            map, 
+            map,
             HttpStatus.CREATED
         );
     }
@@ -45,7 +45,7 @@ public class UserService {
             map.put("datos", user);
             map.put("mensaje", "La cuenta se actualizo con exito.");
             return new ResponseEntity<>(
-                map, 
+                map,
                 HttpStatus.ACCEPTED
             );
         }
@@ -53,7 +53,7 @@ public class UserService {
             map.put("error", true);
             map.put("mensaje", "No existe una cuenta con ese id.");
             return new ResponseEntity<>(
-                map, 
+                map,
                 HttpStatus.CONFLICT
             );
         }
@@ -66,14 +66,14 @@ public class UserService {
             map.put("error", true);
             map.put("mensaje", "No existe una cuenta con ese id.");
             return new ResponseEntity<>(
-                map, 
+                map,
                 HttpStatus.CONFLICT
             );
         } else {
             userRepository.deleteById(id);
             map.put("mensaje", "Cuenta eliminada.");
             return new ResponseEntity<>(
-                map, 
+                map,
                 HttpStatus.ACCEPTED
             );
         }
