@@ -13,33 +13,90 @@ def showSnackBar(page, message, success=True):
     page.snack_bar = snack
     snack.open = True
     page.update()
+    
+    
+def showPurchaseView(page, pizza_type, price):
+    page.controls.clear()
+    
+    title = ft.Text(f"Compra de Pizza {pizza_type}", size=30, weight="bold")
+    price_text = ft.Text(f"Total: ${price}", size=20)
+    purchase_button = ft.ElevatedButton(text="Comprar", on_click=lambda _: showSnackBar(page, "Compra realizada con éxito"))
+    back_button = ft.ElevatedButton(text="Regresar", on_click=lambda _: showMenuView(page))
+    
+    page.add(
+        ft.Column(
+            [
+                title,
+                price_text,
+                purchase_button,
+                back_button
+            ],
+            alignment=ft.MainAxisAlignment.CENTER,
+            spacing=20,
+        )
+    )
+    page.update()
 
 def showMenuView(page):
     page.controls.clear()
 
-    # Elementos de la vista del menú
     title = ft.Text("Menú", size=32, weight="bold")
-    hawaianaImage = ft.Image(src="https://cdn2.cocinadelirante.com/800x600/filters:format(webp):quality(75)/sites/default/files/images/2019/11/como-hacer-pizza-hawaiana.jpg", width=200, height=100)
-    hawaianaButton = ft.ElevatedButton(text="Hawaiana", on_click=lambda _: showSnackBar(page, "Pedido Hawaiana realizado"))
-    peperonniImage = ft.Image(src="https://www.simplyrecipes.com/thmb/X2B0QCVdGJWGO1gW6GR7cz1rhe0=/750x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/__opt__aboutcom__coeus__resources__content_migration__simply_recipes__uploads__2019__09__easy-pepperoni-pizza-lead-3-8f256746d649404baa36a44d271329bc.jpg", width=200, height=100)
-    peperonniButton = ft.ElevatedButton(text="Peperonni", on_click=lambda _: showSnackBar(page, "Pedido Peperonni realizado"))
-    vegetalesImage = ft.Image(src="https://api.pizzahut.io/v1/content/images/pizza/veg-supreme.6fcf716cd4ec19d7723f14b0b84459ec.1.jpg", width=200, height=100)
-   
-    vegetalesButton = ft.ElevatedButton(text="Vegetales", on_click=lambda _: showSnackBar(page, "Pedido Vegetales realizado"))
+    
+    hawaianaColumn = ft.Column(
+        [
+            ft.Image(src="https://cdn2.cocinadelirante.com/800x600/filters:format(webp):quality(75)/sites/default/files/images/2019/11/como-hacer-pizza-hawaiana.jpg", width=400, height=200),
+            ft.ElevatedButton(
+                text="Hawaiana",
+                on_click=lambda _: (showSnackBar(page, "Pedido Hawaiana realizado"), showPurchaseView(page, "Hawaiana", 120))
+            )
+        ],
+        alignment=ft.MainAxisAlignment.CENTER,
+        horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+        spacing=10,
+    )
+    
+    peperonniColumn = ft.Column(
+        [
+            ft.Image(src="https://www.simplyrecipes.com/thmb/X2B0QCVdGJWGO1gW6GR7cz1rhe0=/750x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/__opt__aboutcom__coeus__resources__content_migration__simply_recipes__uploads__2019__09__easy-pepperoni-pizza-lead-3-8f256746d649404baa36a44d271329bc.jpg", width=400, height=200),
+            ft.ElevatedButton(
+                text="Peperonni",
+                on_click=lambda _: (showSnackBar(page, "Pedido Peperonni realizado"), showPurchaseView(page, "Peperonni", 129))
+            )
+        ],
+        alignment=ft.MainAxisAlignment.CENTER,
+        horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+        spacing=10,
+    )
+    
+    vegetalesColumn = ft.Column(
+        [
+            ft.Image(src="https://api.pizzahut.io/v1/content/images/pizza/veg-supreme.6fcf716cd4ec19d7723f14b0b84459ec.1.jpg", width=400, height=200),
+            ft.ElevatedButton(
+                text="Vegetales",
+                on_click=lambda _: (showSnackBar(page, "Pedido Vegetales realizado"), showPurchaseView(page, "Vegetales", 110))
+            )
+        ],
+        alignment=ft.MainAxisAlignment.CENTER,
+        horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+        spacing=10,
+    )
+
     backButton = ft.ElevatedButton(text="Regresar", on_click=lambda _: showPizzeriaView(page))
 
-    # Elementos de la página
     page.add(
         createNavBar(page),
         ft.Column(
             [
                 title,
-                hawaianaImage,
-                hawaianaButton,
-                peperonniImage,
-                peperonniButton,
-                vegetalesImage,
-                vegetalesButton,
+                ft.Row(
+                    [
+                        hawaianaColumn,
+                        peperonniColumn,
+                        vegetalesColumn,
+                    ],
+                    alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
+                    spacing=20,
+                ),
                 backButton
             ],
             alignment=ft.MainAxisAlignment.CENTER,
@@ -51,7 +108,6 @@ def showMenuView(page):
 def showPizzeriaView(page):
     page.controls.clear()
 
-    # Elementos de la vista de la pizzería
     title = ft.Text("Pizzeria", size=32, weight="bold")
     pizzaImage = ft.Image(src="https://2trendies.com/hero/2023/04/pizzapepperoni.jpg?width=1200&aspect_ratio=16:9", width=400, height=200)
     orderButton = ft.ElevatedButton(text="Ordenar pedido", on_click=lambda _: showMenuView(page))
