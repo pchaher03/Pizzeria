@@ -1,82 +1,69 @@
 package com.example.pizzeria.Order;
 
-import java.util.List;
+import java.io.Serializable;
 
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "orders")
-public class Order {
-    @Id
+public class Order implements Serializable {
+	@Id
 	@GeneratedValue(strategy =  GenerationType.IDENTITY)
 	private Long id;
-	
+
 	@Column(name = "user_id")
 	private Long userId;
 
-	@Column(name = "direction")
-	private String direction;
+	@Column(name = "pizza")
+	private String pizza;
 
-	@Column(name = "items")
-	private List<Long> items;
-
-	@Column(name = "total")
-	private float total;
+	@Column(name = "price")
+	private Float price;
 
 	public Order() {};
 
-	public Order(Long userId, String direction, List<Long> items, Float total) {
+	public Order(Long userId, String pizza, Float price) {
 		this.userId = userId;
-        this.direction = direction;
-        this.items = items;
-		this.total = total;
+        this.pizza = pizza;
+        this.price = price;
     }
 
-	public Order(Long id, Long userId, String direction, List<Long> items, Float total) {
+	public Order(Long id, Long userId, String pizza, Float price) {
 		this.id = id;
 		this.userId = userId;
-        this.direction = direction;
-        this.items = items;
-		this.total = total;
+        this.pizza = pizza;
+        this.price = price;
     }
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
-	public long getUserId() {
+	public Long getUserId() {
 		return userId;
 	}
 
-	public void setUserId(long userId) {
+	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
 
-	public String getDirection() {
-		return direction;
+	public String getPizza() {
+		return pizza;
 	}
 
-	public void setDirection(String direction) {
-		this.direction = direction;
+	public void setPizza(String pizza) {
+		this.pizza = pizza;
 	}
 
-	public List<Long> getItems() {
-		return items;
+	public Float getPrice() {
+		return price;
 	}
 
-	public void setItems(List<Long> items) {
-		this.items = items;
-	}
-
-	public Float getTotal() {
-		return total;
-	}
-	
-	public void setTotal(Float total) {
-		this.total = total;
+	public void setPrice(Float price) {
+		this.price = price;
 	}
 }

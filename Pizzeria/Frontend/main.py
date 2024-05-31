@@ -13,23 +13,43 @@ def showSnackBar(page, message, success=True):
     page.snack_bar = snack
     snack.open = True
     page.update()
-    
-    
-def showPurchaseView(page, pizza_type, price):
+
+def purchase(page, pizzaType, price):
+    try:
+        payload = {
+            "userId": page.session.get("usuario")["id"],
+            "pizza": pizzaType,
+            "price": price,
+        }
+
+        response = requests.post("http://localhost:8080/orders/addOrder", json = payload)
+        jsonResponse = json.loads(response.content)
+
+        if response.status_code == 202:
+            showSnackBar(page, {jsonResponse["mensaje"]}, success=True)
+        else:
+            showSnackBar(page, f"Error: {response.status_code} - {jsonResponse["mensaje"]}", success=False)
+    except Exception as ex:
+        print(payload)
+
+        showSnackBar(page, f"Error: {str(ex)}", success=False)
+
+
+def showPurchaseView(page, pizzaType, price):
     page.controls.clear()
-    
-    title = ft.Text(f"Compra de Pizza {pizza_type}", size=30, weight="bold")
-    price_text = ft.Text(f"Total: ${price}", size=20)
-    purchase_button = ft.ElevatedButton(text="Comprar", on_click=lambda _: showSnackBar(page, "Compra realizada con éxito"))
-    back_button = ft.ElevatedButton(text="Regresar", on_click=lambda _: showMenuView(page))
-    
+
+    title = ft.Text(f"Compra de Pizza {pizzaType}", size=30, weight="bold")
+    priceText = ft.Text(f"Total: ${price}", size=20)
+    purchaseButton = ft.ElevatedButton(text="Comprar", on_click=lambda _: purchase(page, pizzaType, price))
+    backButton = ft.ElevatedButton(text="Regresar", on_click=lambda _: showMenuView(page))
+
     page.add(
         ft.Column(
             [
                 title,
-                price_text,
-                purchase_button,
-                back_button
+                priceText,
+                purchaseButton,
+                backButton
             ],
             alignment=ft.MainAxisAlignment.CENTER,
             spacing=20,
@@ -41,39 +61,39 @@ def showMenuView(page):
     page.controls.clear()
 
     title = ft.Text("Menú", size=32, weight="bold")
-    
+
     hawaianaColumn = ft.Column(
         [
             ft.Image(src="https://cdn2.cocinadelirante.com/800x600/filters:format(webp):quality(75)/sites/default/files/images/2019/11/como-hacer-pizza-hawaiana.jpg", width=400, height=200),
             ft.ElevatedButton(
                 text="Hawaiana",
-                on_click=lambda _: (showSnackBar(page, "Pedido Hawaiana realizado"), showPurchaseView(page, "Hawaiana", 120))
+                on_click=lambda _: showPurchaseView(page, "Hawaiana", 120)
             )
         ],
         alignment=ft.MainAxisAlignment.CENTER,
         horizontal_alignment=ft.CrossAxisAlignment.CENTER,
         spacing=10,
     )
-    
+
     peperonniColumn = ft.Column(
         [
             ft.Image(src="https://www.simplyrecipes.com/thmb/X2B0QCVdGJWGO1gW6GR7cz1rhe0=/750x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/__opt__aboutcom__coeus__resources__content_migration__simply_recipes__uploads__2019__09__easy-pepperoni-pizza-lead-3-8f256746d649404baa36a44d271329bc.jpg", width=400, height=200),
             ft.ElevatedButton(
                 text="Peperonni",
-                on_click=lambda _: (showSnackBar(page, "Pedido Peperonni realizado"), showPurchaseView(page, "Peperonni", 129))
+                on_click=lambda _: showPurchaseView(page, "Peperonni", 129)
             )
         ],
         alignment=ft.MainAxisAlignment.CENTER,
         horizontal_alignment=ft.CrossAxisAlignment.CENTER,
         spacing=10,
     )
-    
+
     vegetalesColumn = ft.Column(
         [
             ft.Image(src="https://api.pizzahut.io/v1/content/images/pizza/veg-supreme.6fcf716cd4ec19d7723f14b0b84459ec.1.jpg", width=400, height=200),
             ft.ElevatedButton(
                 text="Vegetales",
-                on_click=lambda _: (showSnackBar(page, "Pedido Vegetales realizado"), showPurchaseView(page, "Vegetales", 110))
+                on_click=lambda _: showPurchaseView(page, "Vegetales", 110)
             )
         ],
         alignment=ft.MainAxisAlignment.CENTER,
@@ -268,8 +288,6 @@ def delete(page):
             showSnackBar(page, f"Error: {response.status_code} - {jsonResponse["mensaje"]}", success=False)
     except Exception as ex:
         showSnackBar(page, f"Error: {str(ex)}", success=False)
-
-    return
 
 def showEditAccountView(page):
     page.controls.clear()
