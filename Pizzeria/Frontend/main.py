@@ -100,12 +100,12 @@ def login(page, emailInput, passwordInput):
 
     try:
         response = requests.post("http://localhost:8080/auth/login", json=payload)
+
         if response.status_code == 202:
+            #guardar token en la sesion
             jsonResponse = json.loads(response.content)
             token = jsonResponse["token"]
-
             jwtToken = jwt.decode(token, options={"verify_signature": False})
-
             page.session.set("token", token)
             page.session.set("usuario", jwtToken["usuario"])
 
@@ -155,18 +155,33 @@ def registerAndLoginPage(page):
         )
     )
 
-def update(page, payload):
-    userId = page.session.get("usuario")["id"]
+def update(page, passwordInput, firstNameInput, lastNameInput, cellphoneInput):
+    password = passwordInput.value
+    firstName = firstNameInput.value
+    lastName = lastNameInput.value
+    cellphone = cellphoneInput.value
+
+    payload = {
+        "id": page.session.get("usuario")["id"],
+        "password": password,
+        "firstName": firstName,
+        "lastName": lastName,
+        "cellphone": cellphone
+    }
 
     try:
-        response = requests.put("http://localhost:8080/auth/updateAccount/{userId}", json=payload)
+        response = requests.put("http://localhost:8080/auth/updateAccount", json = payload)
+
+        #guardar token en la sesion
         jsonResponse = json.loads(response.content)
+        token = jsonResponse["token"]
+        jwtToken = jwt.decode(token, options={"verify_signature": False})
+        page.session.set("token", token)
+        page.session.set("usuario", jwtToken["usuario"])
 
         if response.status_code == 202:
-
-            showSnackBar(page, "Registro exitoso", success=True)
+            showSnackBar(page, {jsonResponse["mensaje"]}, success=True)
         else:
-            #showSnackBar(page, userId, success=True)
             showSnackBar(page, f"Error: {response.status_code} - {jsonResponse["mensaje"]}", success=False)
     except Exception as ex:
 
@@ -175,6 +190,22 @@ def update(page, payload):
     page.update()
 
 def delete(page):
+    try:
+        payload = {
+            "id": page.session.get("usuario")["id"],
+        }
+
+        response = requests.delete("http://localhost:8080/auth/deleteAccount", json = payload)
+        jsonResponse = json.loads(response.content)
+
+        if response.status_code == 202:
+            showSnackBar(page, {jsonResponse["mensaje"]}, success=True)
+            registerAndLoginPage(page)
+        else:
+            showSnackBar(page, f"Error: {response.status_code} - {jsonResponse["mensaje"]}", success=False)
+    except Exception as ex:
+        showSnackBar(page, f"Error: {str(ex)}", success=False)
+
     return
 
 def showEditAccountView(page):
@@ -185,14 +216,7 @@ def showEditAccountView(page):
     lastNameInput = ft.TextField(label="Apellido")
     cellphoneInput = ft.TextField(label="Teléfono")
 
-    payload = {
-        "password": passwordInput.value,
-        "firstName": firstNameInput.value,
-        "lastName": lastNameInput.value,
-        "cellphone": cellphoneInput.value
-    }
-
-    registerButton = ft.ElevatedButton(text="Cambiar Datos", on_click=lambda e: update(page, payload))
+    registerButton = ft.ElevatedButton(text="Cambiar Datos", on_click=lambda e: update(page, passwordInput, firstNameInput, lastNameInput, cellphoneInput))
     deleteButton = ft.ElevatedButton(text="Borrar cuenta", on_click=lambda e: delete(page))
 
     result = ft.Text()

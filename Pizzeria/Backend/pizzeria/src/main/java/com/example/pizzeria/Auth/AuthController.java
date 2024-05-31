@@ -3,12 +3,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.pizzeria.User.User;
-
 import java.util.HashMap;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -56,15 +54,12 @@ public class AuthController {
             );
         }
     }
-    @PutMapping("/updateAccount/{userId}")
+    @PutMapping("/updateAccount")
     @ResponseBody
-    public ResponseEntity<Object> update(@PathVariable("userId") String userId, @RequestBody User user) {
+    public ResponseEntity<Object> update(@RequestBody UpdateRequest request) {
         HashMap<String, Object> map = new HashMap<String, Object>();
         try {
-            //Long prueba = Long.parseLong(userId);
-
-            user.setId(Long.parseLong(userId));
-            map.put("datos", authService.update(user));
+            map.put("token", authService.update(request.getId(), request));
             map.put("mensaje", "Usuario actualizado");
             return new ResponseEntity<>(
                 map,
@@ -72,18 +67,18 @@ public class AuthController {
             );
         } catch(Error error) {
             map.put("error", true);
-            map.put("mensaje", userId);
             return new ResponseEntity<>(
                 map,
                 HttpStatus.CONFLICT
             );
         }
     }
-    @PostMapping("/deleteAccount")
-    public ResponseEntity<Object> delete(@RequestBody RegisterRequest request) {
+    @DeleteMapping("/deleteAccount")
+    public ResponseEntity<Object> delete(@RequestBody DeleteRequest request) {
         HashMap<String, Object> map = new HashMap<String, Object>();
         try {
-            map.put("token", authService.register(request));
+            authService.delete(request.getId());
+            map.put("mensaje", "Se borro la cuenta.");
             return new ResponseEntity<>(
                 map,
                 HttpStatus.ACCEPTED

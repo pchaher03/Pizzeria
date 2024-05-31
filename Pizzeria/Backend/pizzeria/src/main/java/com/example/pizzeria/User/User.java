@@ -27,16 +27,17 @@ public class User implements UserDetails {
 
 	@Column(name = "password")
     private String password;
-	
+
 	@Column(name = "first_name")
 	private String firstName;
-	
+
 	@Column(name = "last_name")
 	private String lastName;
 
 	@Column(name = "cellphone")
 	private String cellphone;
 
+	@Column(name = "role")
 	@Enumerated
 	Role role;
 
@@ -85,7 +86,7 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
-    
+
 	public long getId() {
 		return id;
 	}
@@ -105,7 +106,7 @@ public class User implements UserDetails {
 	public String getPassword() {
 		return password;
 	}
-	
+
 	public void setPassword(String password) {
 		this.password = password;
 	}
@@ -121,7 +122,7 @@ public class User implements UserDetails {
 	public String getLastName() {
 		return lastName;
 	}
-	
+
 	public void setLastName(String last_name) {
 		this.lastName = last_name;
 	}
@@ -132,6 +133,14 @@ public class User implements UserDetails {
 
 	public void setCellphone(String cellphone) {
 		this.cellphone = cellphone;
+	}
+
+	public Role getRole() {
+		return role;
+	}
+
+	public void setRole(Role role) {
+		this.role = role;
 	}
 
 }
