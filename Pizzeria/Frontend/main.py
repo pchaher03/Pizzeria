@@ -19,8 +19,12 @@ def showMenuView(page):
 
     # Elementos de la vista del menú
     title = ft.Text("Menú", size=32, weight="bold")
+    hawaianaImage = ft.Image(src="https://cdn2.cocinadelirante.com/800x600/filters:format(webp):quality(75)/sites/default/files/images/2019/11/como-hacer-pizza-hawaiana.jpg", width=200, height=100)
     hawaianaButton = ft.ElevatedButton(text="Hawaiana", on_click=lambda _: showSnackBar(page, "Pedido Hawaiana realizado"))
+    peperonniImage = ft.Image(src="https://www.simplyrecipes.com/thmb/X2B0QCVdGJWGO1gW6GR7cz1rhe0=/750x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/__opt__aboutcom__coeus__resources__content_migration__simply_recipes__uploads__2019__09__easy-pepperoni-pizza-lead-3-8f256746d649404baa36a44d271329bc.jpg", width=200, height=100)
     peperonniButton = ft.ElevatedButton(text="Peperonni", on_click=lambda _: showSnackBar(page, "Pedido Peperonni realizado"))
+    vegetalesImage = ft.Image(src="https://api.pizzahut.io/v1/content/images/pizza/veg-supreme.6fcf716cd4ec19d7723f14b0b84459ec.1.jpg", width=200, height=100)
+   
     vegetalesButton = ft.ElevatedButton(text="Vegetales", on_click=lambda _: showSnackBar(page, "Pedido Vegetales realizado"))
     backButton = ft.ElevatedButton(text="Regresar", on_click=lambda _: showPizzeriaView(page))
 
@@ -30,8 +34,11 @@ def showMenuView(page):
         ft.Column(
             [
                 title,
+                hawaianaImage,
                 hawaianaButton,
+                peperonniImage,
                 peperonniButton,
+                vegetalesImage,
                 vegetalesButton,
                 backButton
             ],
