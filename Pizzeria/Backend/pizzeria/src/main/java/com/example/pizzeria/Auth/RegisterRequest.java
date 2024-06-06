@@ -16,7 +16,7 @@ public class RegisterRequest {
         this.lastName = lastName;
         this.cellphone = cellphone;
     }
-    
+
 	public String getEmail() {
 		return email;
 	}
@@ -28,7 +28,7 @@ public class RegisterRequest {
 	public String getPassword() {
 		return password;
 	}
-	
+
 	public void setPassword(String password) {
 		this.password = password;
 	}
@@ -44,7 +44,7 @@ public class RegisterRequest {
 	public String getLastName() {
 		return lastName;
 	}
-	
+
 	public void setLastName(String last_name) {
 		this.lastName = last_name;
 	}
@@ -56,5 +56,4 @@ public class RegisterRequest {
 	public void setCellphone(String cellphone) {
 		this.cellphone = cellphone;
 	}
-    
 }

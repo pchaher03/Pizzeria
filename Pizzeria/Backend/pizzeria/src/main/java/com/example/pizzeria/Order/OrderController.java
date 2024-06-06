@@ -13,14 +13,18 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(path = "orders")
 public class OrderController {
     private final OrderService orderService;
+
     OrderController(OrderService orderService) {
         this.orderService = orderService;
     }
+
     @PostMapping("/addOrder")
     public ResponseEntity<Object> add(@RequestBody OrderRequest request) {
         HashMap<String, Object> map = new HashMap<String, Object>();
+
         try {
             map.put("mensaje", orderService.add(request));
+
             return new ResponseEntity<>(
                 map,
                 HttpStatus.ACCEPTED
@@ -28,6 +32,7 @@ public class OrderController {
         } catch(Error error) {
             map.put("error", true);
             map.put("mensaje", error.getMessage());
+
             return new ResponseEntity<>(
                 map,
                 HttpStatus.CONFLICT

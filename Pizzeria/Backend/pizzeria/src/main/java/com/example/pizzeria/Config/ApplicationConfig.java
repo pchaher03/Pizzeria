@@ -13,28 +13,34 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.example.pizzeria.User.UserRepository;
 
-
 @Configuration
 public class ApplicationConfig {
     private final UserRepository userRepository;
+
     public ApplicationConfig(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
+
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception{
         return config.getAuthenticationManager();
     }
+
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
+
         authenticationProvider.setUserDetailsService(userDetailService());
         authenticationProvider.setPasswordEncoder(passwordEncoder());
+
         return authenticationProvider;
     }
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
     @Bean
     public UserDetailsService userDetailService() {
         return email -> userRepository.findUserByEmail(email)
